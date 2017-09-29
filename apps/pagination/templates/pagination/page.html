@@ -1,0 +1,9 @@
+{% for user in users %}
+<tr>
+    <th>{{user.id}}</th>
+    <th>{{user.first_name}}</th>
+    <th>{{user.last_name}}</th>
+    <th>{{user.registered|date:"Y-m-d"}}</th>
+    <th>{{user.email}}</th>
+</tr>
+{% endfor %}

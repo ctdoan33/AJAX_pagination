@@ -1,0 +1,23 @@
+<p><a href="/page/1">1</a> {% for x in page_range %} | <a href="/page/{{x}}">{{x}}</a> {% endfor %}</p>
+<table>
+    <thead>
+        <tr>
+            <th>leads_id</th>
+            <th>first name</th>
+            <th>last name</th>
+            <th>registered date</th>
+            <th>email</th>
+        </tr>
+    </thead>
+    <tbody id="tbody">
+        {% for user in users %}
+        <tr>
+            <th>{{user.id}}</th>
+            <th>{{user.first_name}}</th>
+            <th>{{user.last_name}}</th>
+            <th>{{user.registered|date:"Y-m-d"}}</th>
+            <th>{{user.email}}</th>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

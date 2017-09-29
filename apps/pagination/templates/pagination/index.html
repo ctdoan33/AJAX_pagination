@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <title>Leads Ajax example</title>
+    <script>
+        function page_select(){
+            $('a').click(function(e){
+                e.preventDefault();
+                $.ajax({
+                    url: $(this).attr('href'),
+                    method: 'post',
+                    data: $('#search').serialize(), 
+                    success: function(serverResponse){
+                        $('#tbody').html(serverResponse)
+                    }
+                });
+            })
+        }
+        function search(){
+            $.ajax({
+                url: '/search',
+                method: 'post',
+                data: $('#search').serialize(), 
+                success: function(serverResponse){
+                    $('#result').html(serverResponse)
+                    page_select();
+                }
+            });
+        }
+        $(document).ready(function(){
+            page_select();
+            $('#search').keyup(function(){
+                search();
+            })
+            $('#search').change(function(){
+                search();
+            })
+        });
+    </script>
+</head>
+<body>
+    <form action="/search" method="post" id="search">
+        {% csrf_token %}
+        Name: <input type="text" name="name">
+        From: <input type="date" name="from_date">
+        To: <input type="date" name="to_date">
+    </form>
+    <div id="result">
+        <p><a href="/page/1">1</a> {% for x in page_range %} | <a href="/page/{{x}}">{{x}}</a> {% endfor %}</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>leads_id</th>
+                    <th>first name</th>
+                    <th>last name</th>
+                    <th>registered date</th>
+                    <th>email</th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+                {% for user in users %}
+                <tr>
+                    <th>{{user.id}}</th>
+                    <th>{{user.first_name}}</th>
+                    <th>{{user.last_name}}</th>
+                    <th>{{user.registered|date:"Y-m-d"}}</th>
+                    <th>{{user.email}}</th>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+</body>
+</html>
